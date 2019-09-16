@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+    <bean id="myRealm" class="org.java.realm.MyRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+        <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+            <property name="realm" ref="myRealm"/>
+            <property name="cacheManager" ref="cacheManager"/>
+        </bean>
+
+        <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+            <property name="securityManager" ref="securityManager"/>
+            <property name="loginUrl" value="/login.do"/>
+            <property name="filterChainDefinitions" >
+                <value>
+                    /img/**=anon
+                    /js/**=anon
+                    /css/**=anon
+                    /favicon.ico = anon
+                    /logout.do=logout
+                    /**=authc
+                </value>
+            </property>
+        </bean>
+
+        <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+            <property name="hashAlgorithmName" value="md5"/>
+            <property name="hashIterations" value="3"/>
+        </bean>
+
+        <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+            <property name="cacheManagerConfigFile" value="classpath:shiro-ehcache.xml"/>
+        </bean>
+</beans>

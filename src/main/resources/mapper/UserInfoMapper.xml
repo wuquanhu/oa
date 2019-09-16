@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.UserinfoMapper">
+    <select id="userBylog" resultType="map">
+         SELECT u.*,r.rolename FROM userinfo u,roleinfo r WHERE r.roleid=u.roleid AND userlog=#{userlog}
+    </select>
+
+    <!--加载菜单-->
+    <select id="userMenu" resultType="map">
+        SELECT * FROM sysfun WHERE parentnodeid IN (SELECT nodeid FROM roleright WHERE roleid=#{roleid})
+    </select>
+
+</mapper>
